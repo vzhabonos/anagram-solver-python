@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from solver import Solver
 
 
 app = Flask(__name__)
@@ -7,7 +8,5 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    if request.args.get('test'):
-        return 'test'
-    else:
-        return "NOT test"
+    solver = Solver('33bob sandvagene')
+    return 'TEST'
