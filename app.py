@@ -8,7 +8,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    solver = Solver('33bob sandvagene')
-    alphas = solver.generate_all_possible_alphas()
-    print(alphas)
-    return 'TEST'
+    query = request.args.get('query')
+    alphas = {}
+    if query:
+        solver = Solver(query)
+        alphas = solver.generate_all_possible_alphas()
+    return str(len(alphas)) + " alphas generated for query - " + str(query)

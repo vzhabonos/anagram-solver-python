@@ -32,16 +32,16 @@ class Solver:
             char_array = list(characters)
         char_array.sort()
         first_alpha = self.make_alpha_from_array(char_array)
-        alphas = {first_alpha: first_alpha}
-        count_char = len(char_array)
+        alphas = dict()
+        alphas[first_alpha] = first_alpha
         for i, char in enumerate(char_array):
-            alphas = alphas.update(self.generate_alphas(char_array, i))
+            alphas.update(self.generate_alphas(char_array, i))
         if not recursive_run:
             next_iteration_char_array = list(char_array)
             while 0 in next_iteration_char_array and len(next_iteration_char_array) > 1:
                 del next_iteration_char_array[0]
                 next_iteration_char_array = list(next_iteration_char_array)
-                alphas = alphas.update(self.generate_all_possible_alphas(True, next_iteration_char_array))
+                alphas.update(self.generate_all_possible_alphas(True, next_iteration_char_array))
         return alphas
 
     def generate_alphas(self, char_array, pos_from=0, delete=1):
@@ -54,11 +54,11 @@ class Solver:
         """
         count_char = len(char_array)
         alphas = self.generate_alpha_loop(char_array, pos_from, delete, True)
-        alphas = alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, False))
+        alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, False))
         while (count_char - delete) > 0:
             delete += 1
-            alphas = alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, True))
-            alphas = alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, False))
+            alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, True))
+            alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, False))
         return alphas
 
     def generate_alpha_loop(self, char_array, pos_from=0, delete=1, delete_double=True):
@@ -69,21 +69,26 @@ class Solver:
         :param delete_double:
         :return:
         """
-        alphas = {}
+        alphas = dict()
         count_char = len(char_array)
         last_index = count_char - 1
-        if pos_from in char_array and delete_double:
-            del char_array[int(pos_from)]
+        if delete_double:
+            try:
+                del char_array[int(pos_from)]
+            except Exception as e:
+                print("ERROR::", str(e))
         for offset in range(0, count_char):
             char_array_copy = list(char_array)
             for u in range(0, delete):
                 del_index = pos_from + u + offset
                 if del_index > last_index:
                     del_index = del_index - last_index
-                if del_index in char_array_copy:
+                try:
                     del char_array_copy[del_index]
                     if len(char_array_copy) > 1:
                         alpha = "".join(char_array_copy).lower()
                         alphas[alpha] = alpha
+                except Exception as e:
+                    print("ERROR::", str(e))
         return alphas
 
