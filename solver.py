@@ -21,7 +21,7 @@ class Solver:
         array.sort()
         return "".join(array).lower()
 
-    def generate_all_possible_alphas(self, recursive_run = False, characters = []):
+    def generate_all_possible_alphas(self, recursive_run=False, characters=[]):
         """
         :param recursive_run:
         :param characters:
@@ -34,7 +34,7 @@ class Solver:
         first_alpha = self.make_alpha_from_array(char_array)
         alphas = {first_alpha: first_alpha}
         count_char = len(char_array)
-        for char, i in char_array:
+        for i, char in enumerate(char_array):
             alphas = alphas.update(self.generate_alphas(char_array, i))
         if not recursive_run:
             next_iteration_char_array = list(char_array)
@@ -44,7 +44,7 @@ class Solver:
                 alphas = alphas.update(self.generate_all_possible_alphas(True, next_iteration_char_array))
         return alphas
 
-    def generate_alphas(self, char_array, pos_from = 0, delete = 1):
+    def generate_alphas(self, char_array, pos_from=0, delete=1):
         """
         This methods generate all possible alphas for given array of characters
         :param char_array:
@@ -61,7 +61,7 @@ class Solver:
             alphas = alphas.update(self.generate_alpha_loop(char_array, pos_from, delete, False))
         return alphas
 
-    def generate_alpha_loop(self, char_array, pos_from = 0, delete = 1, delete_double = True):
+    def generate_alpha_loop(self, char_array, pos_from=0, delete=1, delete_double=True):
         """
         :param char_array:
         :param pos_from:
@@ -69,11 +69,11 @@ class Solver:
         :param delete_double:
         :return:
         """
-        alphas = dict()
+        alphas = {}
         count_char = len(char_array)
         last_index = count_char - 1
         if pos_from in char_array and delete_double:
-            del char_array[pos_from]
+            del char_array[int(pos_from)]
         for offset in range(0, count_char):
             char_array_copy = list(char_array)
             for u in range(0, delete):
